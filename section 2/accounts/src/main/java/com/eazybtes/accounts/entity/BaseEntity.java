@@ -2,10 +2,12 @@ package com.eazybtes.accounts.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @MappedSuperclass
+@Getter @Setter @ToString
 public class BaseEntity {
     @Column(updatable = false)
     private LocalDateTime createdAt;
