@@ -1,9 +1,12 @@
-package com.eazybtes.accounts.entity;
+package com.eazybytes.loans.entity;
 
+import com.eazybytes.loans.audit.AuditAwareImpl;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -16,19 +19,19 @@ import java.time.LocalDateTime;
 @Getter @Setter @ToString
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
     @CreatedBy
     @Column(updatable = false)
     private String createdBy;
 
-    @LastModifiedDate
-    @Column(insertable = false)
-    private LocalDateTime updatedAt;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     @LastModifiedBy
     @Column(insertable = false)
     private String updatedBy;
+
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime updatedAt;
 }
