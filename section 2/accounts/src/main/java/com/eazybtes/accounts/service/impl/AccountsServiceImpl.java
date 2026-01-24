@@ -8,6 +8,7 @@ import com.eazybtes.accounts.entity.Customer;
 import com.eazybtes.accounts.exception.CustomerAlreadyExistsException;
 import com.eazybtes.accounts.exception.ResourceNotFoundException;
 import com.eazybtes.accounts.mapper.AccountsMapper;
+import com.eazybtes.accounts.mapper.CustomerMapper;
 import com.eazybtes.accounts.repository.AccountsRepository;
 import com.eazybtes.accounts.repository.CustomerRepository;
 import com.eazybtes.accounts.service.IAccountsService;
@@ -79,6 +80,49 @@ public class AccountsServiceImpl implements IAccountsService {
         customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts,new AccountsDto()));
 
         return customerDto;
+    }
+
+    /**
+     * @param customerDto - CustomerDto Object
+     * @return boolean indicating if the update of Account details is successful or not
+     */
+    @Override
+    public boolean updateAccount(CustomerDto customerDto) {
+        boolean isUpdated=false;
+        AccountsDto accountsDto=customerDto.getAccountsDto();
+        if(accountsDto!=null){
+            Accounts accounts= accountsRepository.findById(accountsDto.getAccountNumber()).orElseThrow(
+                    ()-> new ResourceNotFoundException("Accounts","accountNumber",accountsDto.getAccountNumber().toString())
+            );
+            AccountsMapper.mapToAccounts(customerDto.getAccountsDto(),accounts);
+            accountsRepository.save(accounts);
+
+            Long customerId= accounts.getCustomerId();
+
+            Customer customer=customerRepository.findById(customerId).orElseThrow(
+                    ()-> new ResourceNotFoundException("Customer","CustomerId",customerId.toString())
+            );
+
+            CustomerMapper.mapToCustomer(customerDto,customer);
+            customerRepository.save(customer);
+            isUpdated=true;
+        }
+        return isUpdated;
+    }
+
+    /**
+     * @param mobileNumber - Input Mobile Number
+     * @return boolean indicating if the delete of Account details is successful or not
+     */
+    @Override
+    public boolean deleteAccount(String mobileNumber) {
+        Customer customer=customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                ()-> new  ResourceNotFoundException("Customer","mobileNumber",mobileNumber)
+        );
+
+        customerRepository.deleteById(customer.getCustomerId());
+        accountsRepository.deleteByCustomerId(customer.getCustomerId());
+        return true;
     }
 
 
