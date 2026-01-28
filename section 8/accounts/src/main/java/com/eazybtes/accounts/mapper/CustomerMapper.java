@@ -1,5 +1,6 @@
 package com.eazybtes.accounts.mapper;
 
+import com.eazybtes.accounts.dto.CustomerDetailsDto;
 import com.eazybtes.accounts.dto.CustomerDto;
 import com.eazybtes.accounts.entity.Customer;
 
@@ -10,6 +11,13 @@ public class CustomerMapper {
         customerDto.setEmail(customer.getEmail());
         customerDto.setMobileNumber(customer.getMobileNumber());
         return customerDto;
+    }
+
+    public static CustomerDetailsDto mapToCustomerDetailsDto(Customer customer,CustomerDetailsDto customerDetailsDto){
+        customerDetailsDto.setName(customer.getName());
+        customerDetailsDto.setMobileNumber(customer.getMobileNumber());
+        customerDetailsDto.setEmail(customer.getEmail());
+        return customerDetailsDto;
     }
 
     public static Customer mapToCustomer(CustomerDto customerDto, Customer customer) {
