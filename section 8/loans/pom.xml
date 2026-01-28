@@ -59,19 +59,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -146,7 +141,7 @@
 				<version>3.5.1</version>
 				<configuration>
 					<to>
-						<image>bhagatritwik/${project.artifactId}:s7</image>
+						<image>bhagatritwik/${project.artifactId}:s8</image>
 					</to>
 				</configuration>
 			</plugin>
