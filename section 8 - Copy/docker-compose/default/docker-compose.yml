@@ -1,6 +1,6 @@
 services:
   configserver:
-    image: "bhagatritwik/configserver:s8"
+    image: "bhagatritwik/configserver:s9"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -18,7 +18,7 @@ services:
       - eazybank
 
   eurekaserver:
-    image: "bhagatritwik/eurekaserver:s8"
+    image: "bhagatritwik/eurekaserver:s9"
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -43,10 +43,16 @@ services:
       SPRING_PROFILES_ACTIVE: default
 
   accounts:
-    image: "bhagatritwik/accounts:s8"
+    image: "bhagatritwik/accounts:s9"
     container_name: accounts-ms
     ports:
       - "8080:8080"
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     depends_on:
       configserver:
         condition: service_healthy
@@ -66,10 +72,16 @@ services:
 
 
   loans:
-    image: "bhagatritwik/loans:s8"
+    image: "bhagatritwik/loans:s9"
     container_name: loans-ms
     ports:
       - "8091:8091"
+    healthcheck:
+      test: "curl --fail --silent localhost:8091/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     deploy:
       resources:
         limits:
@@ -85,6 +97,32 @@ services:
       configserver:
         condition: service_healthy
       eurekaserver:
+        condition: service_healthy
+
+  gatewayserver:
+    image: "bhagatritwik/gatewayserver:s9"
+    container_name: gatewayserver-ms
+    ports:
+      - "8072:8072"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - eazybank
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
+    depends_on:
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+      accounts:
+        condition: service_healthy
+      loans:
         condition: service_healthy
 
 networks:

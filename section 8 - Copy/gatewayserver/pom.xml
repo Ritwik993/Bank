@@ -84,7 +84,7 @@
 				<version>3.4.2</version>
 				<configuration>
 					<to>
-						<image>eazybytes/${project.artifactId}:s9</image>
+						<image>bhagatritwik/${project.artifactId}:s9</image>
 					</to>
 				</configuration>
 			</plugin>
